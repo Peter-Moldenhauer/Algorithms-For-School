@@ -103,8 +103,14 @@ class Graph:
                     if node_v.team == node_u.team:
                         self.isPossible = False
 
+    def checkConnectedGraph(self):
+        for vert in self.vertices:
+            if self.vertices[vert].color == 'white':
+                self.bfs(self.vertices[vert])
+
 g = Graph()
 rivalries = []
+wrestlers = []
 
 f = open(sys.argv[1], 'r')
 lines = f.read().splitlines()
@@ -114,14 +120,14 @@ numberWrestlers = ''.join(map(str, numWrestlers))
 numberWrestlers = int(numberWrestlers)
 
 for i in range(1, numberWrestlers + 1):
-    #wrestlers.append(lines[i])
+    wrestlers.append(lines[i])
     g.add_vertex(Vertex(lines[i]))
 
 numRivalries = map(int, lines[numberWrestlers + 1])
 numberRivalries = ''.join(map(str, numRivalries))
 numberRivalries = int(numberRivalries)
 
-for x in range(numberRivalries + 1, numberRivalries*2+1):
+for x in range(numberWrestlers + 2, numberWrestlers*2+1):
     rivalries.append(lines[x])
 
 for rival in rivalries:
@@ -131,12 +137,20 @@ for rival in rivalries:
 
 
 g.bfs(g.startVertex)
-#g.print_graph()
+g.checkConnectedGraph()
+
 if g.isPossible:
     print("Yes")
     g.print_Babyfaces()
     g.print_Heels()
 else:
     print("Not possible to designate wrestlers such that each rivalry is between a Babyface and a Heel.")
+
+'''
+print("Number of wrestlers: " + str(numberWrestlers))
+print(wrestlers)
+print("Number of rivalries: " + str(numberRivalries))
+print(rivalries)
+'''
 
 f.close()
